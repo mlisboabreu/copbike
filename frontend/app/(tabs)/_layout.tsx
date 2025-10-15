@@ -2,7 +2,6 @@ import React from 'react';
 import { Tabs } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 
-// Cores para a barra de abas
 const COLORS = {
   primary: '#006400',
   gray: '#A9A9A9',
@@ -12,9 +11,9 @@ export default function TabsLayout() {
   return (
     <Tabs
       screenOptions={{
-        headerShown: false, // Esconde o título no topo de cada tela
-        tabBarActiveTintColor: COLORS.primary, // Cor do ícone ativo
-        tabBarInactiveTintColor: COLORS.gray,   // Cor do ícone inativo
+        headerShown: false,
+        tabBarActiveTintColor: COLORS.primary,
+        tabBarInactiveTintColor: COLORS.gray,
         tabBarStyle: {
           backgroundColor: '#FFFFFF',
           height: 65,
@@ -23,7 +22,7 @@ export default function TabsLayout() {
       }}
     >
       <Tabs.Screen
-        name="index" // Refere-se ao arquivo index.tsx
+        name="index" // Refere-se a index.tsx
         options={{
           title: 'Início',
           tabBarIcon: ({ color, size }) => (
@@ -31,8 +30,18 @@ export default function TabsLayout() {
           ),
         }}
       />
+      {/* NOVA TELA DE RANKING ADICIONADA AQUI */}
       <Tabs.Screen
-        name="profile" // Refere-se ao arquivo profile.tsx
+        name="ranking" // Refere-se a ranking.tsx
+        options={{
+          title: 'Ranking',
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="trophy" size={size} color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="profile" // Refere-se a profile.tsx
         options={{
           title: 'Perfil',
           tabBarIcon: ({ color, size }) => (
@@ -43,3 +52,4 @@ export default function TabsLayout() {
     </Tabs>
   );
 }
+

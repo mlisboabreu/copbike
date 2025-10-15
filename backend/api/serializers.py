@@ -20,3 +20,15 @@ class CommunityChallengeSerializer(serializers.ModelSerializer):
     class Meta:
         model = CommunityChallenge
         fields = ['id', 'title', 'description', 'start_date', 'end_date', 'location_name']
+
+class RankingSerializer(serializers.Serializer):
+    """
+    Serializer para formatar os dados do ranking de utilizadores.
+    Não está ligado a um modelo específico, por isso usamos o Serializer base.
+    """
+    user_id = serializers.IntegerField()
+    username = serializers.CharField(max_length=150)
+    total_distance_km = serializers.FloatField()
+
+    class Meta:
+        fields = ['user_id', 'username', 'total_distance_km']

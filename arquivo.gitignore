@@ -1,0 +1,16 @@
+Backend - Django / Python
+pycache/ *.pyc db.sqlite3 /venv/ .env
+
+Frontend - React Native / Expo
+/node_modules/
+.expo/
+npm-debug.log
+yarn-error.log
+dist/
+build/
+.idea/
+.vscode/
+
+Arquivos de Sistema Operacional
+.DS_Store
+Thumbs.db

@@ -9,7 +9,7 @@ import { useAuth } from '../../context/AuthContext';
 
 const COLORS = { primary: '#006400', white: '#FFFFFF', text: '#333333', accent: '#FFD700', background: '#F5F5F5', red: '#D32F2F' };
 
-const API_BASE_URL = 'http://192.168.0.17:8000';
+const API_BASE_URL = 'http://192.168.0.19:8000';
 
 const BELEM_REGION: Region = {
   latitude: -1.4558,

@@ -6,7 +6,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useFocusEffect } from 'expo-router';
 
 const COLORS = { primary: '#006400', white: '#FFFFFF', text: '#333333', accent: '#FFD700', background: '#F5F5F5', gray: '#A9A9A9' };
-const API_BASE_URL = 'http://192.168.0.17:8000';
+const API_BASE_URL = 'http://192.168.0.19:8000';
 
 type Challenge = {
   id: number;

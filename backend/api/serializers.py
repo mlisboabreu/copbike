@@ -32,3 +32,18 @@ class RankingSerializer(serializers.Serializer):
 
     class Meta:
         fields = ['user_id', 'username', 'total_distance_km']
+
+class RideHistorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Ride
+        fields = ['id', 'start_time', 'distance_km', 'co2_saved_kg']
+
+# NOVO SERIALIZER PARA OS DADOS COMPLETOS DO PERFIL
+class ProfileSerializer(serializers.ModelSerializer):
+    rides = RideHistorySerializer(many=True, read_only=True)
+    total_distance_km = serializers.FloatField()
+    total_co2_saved_kg = serializers.FloatField()
+
+    class Meta:
+        model = User
+        fields = ['id', 'username', 'email', 'rides', 'total_distance_km', 'total_co2_saved_kg']

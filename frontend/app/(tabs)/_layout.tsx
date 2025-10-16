@@ -22,7 +22,7 @@ export default function TabsLayout() {
       }}
     >
       <Tabs.Screen
-        name="index" // Refere-se a index.tsx
+        name="index"
         options={{
           title: 'Início',
           tabBarIcon: ({ color, size }) => (
@@ -30,9 +30,8 @@ export default function TabsLayout() {
           ),
         }}
       />
-      {/* NOVA TELA DE RANKING ADICIONADA AQUI */}
       <Tabs.Screen
-        name="ranking" // Refere-se a ranking.tsx
+        name="ranking"
         options={{
           title: 'Ranking',
           tabBarIcon: ({ color, size }) => (
@@ -40,8 +39,18 @@ export default function TabsLayout() {
           ),
         }}
       />
+      {/* NOVA TELA DE DESAFIOS ADICIONADA AQUI */}
       <Tabs.Screen
-        name="profile" // Refere-se a profile.tsx
+        name="challenges" // Refere-se a challenges.tsx
+        options={{
+          title: 'Desafios',
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="leaf" size={size} color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="profile"
         options={{
           title: 'Perfil',
           tabBarIcon: ({ color, size }) => (

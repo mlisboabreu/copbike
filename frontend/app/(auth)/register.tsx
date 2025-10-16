@@ -4,13 +4,13 @@ import axios from 'axios';
 import { useRouter } from 'expo-router';
 
 const COLORS = { primary: '#006400', background: '#F5F5F5', text: '#333333', white: '#FFFFFF', gray: '#A9A9A9', red: '#D32F2F' };
-const API_BASE_URL = 'http://192.168.0.17:8000'; // IP correto
+const API_BASE_URL = 'http://192.168.0.19:8000'; // IP correto
 
 export default function RegisterScreen() {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [password2, setPassword2] = useState(''); // Para confirmação de senha
+  const [password2, setPassword2] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
@@ -26,18 +26,17 @@ export default function RegisterScreen() {
     
     setIsLoading(true);
     try {
-      // A CORREÇÃO ESTÁ AQUI: O campo 'password' foi renomeado para 'password1'
       await axios.post(`${API_BASE_URL}/api/auth/registration/`, {
         username,
         email,
-        password1: password, // Nome do campo esperado pelo backend
+        password1: password,
         password2,
       });
 
       Alert.alert(
         'Registo Concluído!',
         'A sua conta foi criada com sucesso. Por favor, faça login.',
-        [{ text: 'OK', onPress: () => router.back() }] // Volta para a tela de login
+        [{ text: 'OK', onPress: () => router.back() }]
       );
 
     } catch (error) {
@@ -63,30 +62,30 @@ export default function RegisterScreen() {
         <Text style={styles.title}>Criar Conta</Text>
         <Text style={styles.subtitle}>Junte-se ao movimento Copbike</Text>
         <View style={styles.formContainer}>
+          <Text style={styles.label}>Nome de utilizador</Text>
           <TextInput
-            placeholder="Nome de utilizador"
             style={styles.input}
             value={username}
             onChangeText={setUsername}
             autoCapitalize="none"
           />
+          <Text style={styles.label}>E-mail</Text>
           <TextInput
-            placeholder="E-mail"
             style={styles.input}
             value={email}
             onChangeText={setEmail}
             keyboardType="email-address"
             autoCapitalize="none"
           />
+          <Text style={styles.label}>Senha</Text>
           <TextInput
-            placeholder="Senha"
             style={styles.input}
             value={password}
             onChangeText={setPassword}
             secureTextEntry
           />
+          <Text style={styles.label}>Confirme a senha</Text>
           <TextInput
-            placeholder="Confirme a senha"
             style={styles.input}
             value={password2}
             onChangeText={setPassword2}
@@ -112,6 +111,13 @@ const styles = StyleSheet.create({
   safeArea: { flex: 1, backgroundColor: COLORS.background },
   container: { flex: 1, justifyContent: 'center', alignItems: 'center', padding: 20 },
   formContainer: { width: '100%', marginTop: 40, marginBottom: 20 },
+  label: {
+    fontSize: 14,
+    color: COLORS.primary,
+    marginBottom: 5,
+    fontWeight: '500',
+    alignSelf: 'flex-start',
+  },
   input: { backgroundColor: COLORS.white, paddingHorizontal: 15, paddingVertical: 12, borderRadius: 8, marginBottom: 15, borderWidth: 1, borderColor: COLORS.gray, fontSize: 16 },
   button: { backgroundColor: COLORS.primary, padding: 15, borderRadius: 8, alignItems: 'center' },
   buttonDisabled: { backgroundColor: COLORS.gray },
@@ -120,4 +126,3 @@ const styles = StyleSheet.create({
   subtitle: { fontSize: 16, color: COLORS.text, textAlign: 'center' },
   linkText: { color: COLORS.primary, fontSize: 16, marginTop: 10 },
 });
-

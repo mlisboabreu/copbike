@@ -1,11 +1,12 @@
 import React, { useState, useCallback } from 'react';
-import { View, Text, StyleSheet, SafeAreaView, FlatList, ActivityIndicator, TouchableOpacity, RefreshControl } from 'react-native';
+import { View, Text, StyleSheet, SafeAreaView, FlatList, ActivityIndicator, TouchableOpacity, RefreshControl, Share, Alert } from 'react-native';
 import axios from 'axios';
 import { useAuth } from '../../context/AuthContext';
 import { useFocusEffect } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
 
-const COLORS = { primary: '#006400', white: '#FFFFFF', text: '#333333', accent: '#FFD700', background: '#F5F5F5', gray: '#A9A9A9' };
+const COLORS = { primary: '#006400', secondary: '#2E8B57', white: '#FFFFFF', text: '#333333', accent: '#FFD700', background: '#F5F5F5', gray: '#A9A9A9' };
 const API_BASE_URL = 'http://192.168.0.19:8000';
 
 // Tipos para os dados que vêm da API
@@ -27,7 +28,7 @@ type ProfileData = {
 // Componente para o cartão de estatísticas
 const StatCard = ({ icon, value, label }: { icon: any; value: string; label: string }) => (
   <View style={styles.statCard}>
-    <Ionicons name={icon} size={24} color={COLORS.primary} />
+    <Ionicons name={icon} size={30} color={COLORS.primary} />
     <Text style={styles.statValue}>{value}</Text>
     <Text style={styles.statLabel}>{label}</Text>
   </View>
@@ -81,6 +82,19 @@ export default function ProfileScreen() {
     fetchProfile();
   };
 
+  const handleShare = async () => {
+    if (!profileData) return;
+    try {
+      const message = `Já evitei ${profileData.total_co2_saved_kg.toFixed(1)} kg de CO₂ pedalando com o app Copbike para a COP30! 🌳🚴 #Copbike #COP30 #PedalePeloClima`;
+      await Share.share({
+        message: message,
+        title: 'Minha conquista no Copbike!',
+      });
+    } catch (error) {
+      Alert.alert('Erro', 'Não foi possível partilhar a sua conquista.');
+    }
+  };
+
   if (isLoading) {
     return (
       <View style={styles.centerContainer}>
@@ -99,10 +113,13 @@ export default function ProfileScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
-        <Ionicons name="person-circle" size={60} color={COLORS.primary} />
+      <LinearGradient
+        colors={['#ffffff', '#f0f0f0']}
+        style={styles.header}
+      >
+        <Ionicons name="person-circle" size={80} color={COLORS.primary} />
         <Text style={styles.username}>{profileData.username}</Text>
-      </View>
+      </LinearGradient>
 
       <View style={styles.statsRow}>
         <StatCard icon="bicycle" value={profileData.total_distance_km.toFixed(1)} label="Km Totais" />
@@ -120,9 +137,16 @@ export default function ProfileScreen() {
         refreshControl={<RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />}
       />
 
-      <TouchableOpacity style={styles.logoutButton} onPress={logout}>
-        <Text style={styles.logoutButtonText}>Sair</Text>
-      </TouchableOpacity>
+      <View style={styles.actionsContainer}>
+        <TouchableOpacity style={styles.shareButton} onPress={handleShare}>
+          <Ionicons name="share-social" size={20} color={COLORS.white} />
+          <Text style={styles.actionButtonText}>Partilhar Conquista</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.logoutButton} onPress={logout}>
+           <Ionicons name="log-out-outline" size={20} color={COLORS.text} />
+          <Text style={styles.logoutButtonText}>Sair</Text>
+        </TouchableOpacity>
+      </View>
     </SafeAreaView>
   );
 }
@@ -132,11 +156,12 @@ const styles = StyleSheet.create({
   centerContainer: { flex: 1, justifyContent: 'center', alignItems: 'center' },
   header: {
     alignItems: 'center',
-    padding: 20,
-    backgroundColor: COLORS.white,
+    paddingVertical: 30,
+    borderBottomWidth: 1,
+    borderBottomColor: '#e0e0e0',
   },
   username: {
-    fontSize: 24,
+    fontSize: 26,
     fontWeight: 'bold',
     color: COLORS.text,
     marginTop: 10,
@@ -145,32 +170,37 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-around',
     padding: 20,
+    marginTop: -10,
   },
   statCard: {
     backgroundColor: COLORS.white,
     padding: 20,
-    borderRadius: 12,
+    borderRadius: 16,
     alignItems: 'center',
-    width: '45%',
-    elevation: 2,
+    width: '48%',
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.1,
+    shadowRadius: 10,
+    elevation: 5,
   },
   statValue: {
-    fontSize: 22,
+    fontSize: 24,
     fontWeight: 'bold',
     color: COLORS.primary,
     marginTop: 8,
   },
   statLabel: {
-    fontSize: 12,
+    fontSize: 14,
     color: COLORS.gray,
     marginTop: 4,
   },
   historyTitle: {
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: 'bold',
     color: COLORS.text,
     paddingHorizontal: 20,
-    marginBottom: 10,
+    marginBottom: 15,
   },
   list: {
     paddingHorizontal: 20,
@@ -180,45 +210,55 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: COLORS.white,
     padding: 15,
-    borderRadius: 10,
+    borderRadius: 12,
+    marginBottom: 12,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.05,
+    shadowRadius: 5,
+    elevation: 2,
+  },
+  rideInfo: { flex: 1, marginLeft: 15 },
+  rideDate: { fontSize: 14, color: COLORS.gray },
+  rideDistance: { fontSize: 16, fontWeight: 'bold', color: COLORS.text },
+  rideCo2: { fontSize: 14, color: COLORS.primary, fontWeight: '500' },
+  emptyText: { textAlign: 'center', color: COLORS.gray, marginTop: 20 },
+  actionsContainer: {
+    padding: 20,
+    borderTopWidth: 1,
+    borderTopColor: '#f0f0f0',
+    backgroundColor: COLORS.white,
+  },
+  shareButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: COLORS.primary,
+    padding: 15,
+    borderRadius: 12,
     marginBottom: 10,
   },
-  rideInfo: {
-    flex: 1,
-    marginLeft: 15,
-  },
-  rideDate: {
-    fontSize: 14,
-    color: COLORS.gray,
-  },
-  rideDistance: {
-    fontSize: 16,
+  actionButtonText: {
+    color: COLORS.white,
     fontWeight: 'bold',
-    color: COLORS.text,
-  },
-  rideCo2: {
-    fontSize: 14,
-    color: COLORS.primary,
-    fontWeight: '500',
-  },
-  emptyText: {
-    textAlign: 'center',
-    color: COLORS.gray,
-    marginTop: 20,
+    fontSize: 16,
+    marginLeft: 10,
   },
   logoutButton: {
-    margin: 20,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
     backgroundColor: COLORS.white,
     borderWidth: 1,
     borderColor: COLORS.gray,
     padding: 15,
-    borderRadius: 8,
-    alignItems: 'center',
+    borderRadius: 12,
   },
   logoutButtonText: {
     color: COLORS.text,
     fontWeight: 'bold',
     fontSize: 16,
+    marginLeft: 10,
   },
 });
 

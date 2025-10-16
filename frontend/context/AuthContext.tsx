@@ -4,7 +4,7 @@ import { Alert } from 'react-native';
 import * as SecureStore from 'expo-secure-store';
 
 const TOKEN_KEY = 'copbike-auth-token'; // Chave para guardar o token
-const API_BASE_URL = 'http://192.168.0.17:8000';
+const API_BASE_URL = 'http://192.168.0.19:8000';
 
 interface AuthContextType {
   token: string | null;

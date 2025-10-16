@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, StyleSheet, TouchableOpacity, SafeAreaView, StatusBar, Alert } from 'react-native';
+import { View, Text, TextInput, StyleSheet, TouchableOpacity, SafeAreaView, StatusBar } from 'react-native';
 import { useAuth } from '../../context/AuthContext';
-import { Link, useRouter } from 'expo-router'; // Importar Link e useRouter
+import { Link, useRouter } from 'expo-router';
 
 const COLORS = { primary: '#006400', background: '#F5F5F5', text: '#333333', white: '#FFFFFF', gray: '#A9A9A9' };
 const FONT_SIZES = { body: 16 };
@@ -11,15 +11,13 @@ export default function LoginScreen() {
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const { login } = useAuth();
-  const router = useRouter(); // Hook para navegação
+  const router = useRouter();
 
   const handleLogin = async () => {
     setIsLoading(true);
     try {
       await login(username, password);
-      // O redirecionamento após o login é gerido pelo AuthContext/_layout
     } catch (e) {
-      // O Alert de erro já é mostrado no AuthContext
       setIsLoading(false);
     }
   };
@@ -33,7 +31,6 @@ export default function LoginScreen() {
         <View style={styles.formContainer}>
           <Text style={styles.label}>Utilizador</Text>
           <TextInput
-            placeholder="Digite seu nome de utilizador"
             style={styles.input}
             value={username}
             onChangeText={setUsername}
@@ -41,7 +38,6 @@ export default function LoginScreen() {
           />
           <Text style={styles.label}>Senha</Text>
           <TextInput
-            placeholder="Digite sua senha"
             style={styles.input}
             value={password}
             onChangeText={setPassword}
@@ -56,7 +52,6 @@ export default function LoginScreen() {
           </TouchableOpacity>
         </View>
 
-        {/* A CORREÇÃO ESTÁ AQUI */}
         <Link href="/(auth)/register" asChild>
           <TouchableOpacity>
             <Text style={styles.linkText}>Não tem uma conta? Cadastre-se</Text>
@@ -71,9 +66,9 @@ const styles = StyleSheet.create({
   safeArea: { flex: 1, backgroundColor: COLORS.background },
   container: { flex: 1, justifyContent: 'center', alignItems: 'center', padding: 20 },
   formContainer: { width: '100%', marginTop: 40, marginBottom: 20 },
-  label: { // Estilo para as novas etiquetas
+  label: {
     fontSize: 14,
-    color: COLORS.primary, // Alterado para a cor primária para maior contraste
+    color: COLORS.primary,
     marginBottom: 5,
     fontWeight: '500',
     alignSelf: 'flex-start',

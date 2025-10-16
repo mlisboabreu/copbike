@@ -88,3 +88,6 @@ REST_FRAMEWORK = {
 
 SITE_ID = 1
 
+ACCOUNT_EMAIL_VERIFICATION = "none"  # Desativa a verificação de e-mail
+ACCOUNT_AUTHENTICATION_METHOD = "username_email" # Permite login com username ou e-mail
+ACCOUNT_EMAIL_REQUIRED = True # Exige que o e-mail seja fornecido no registo
